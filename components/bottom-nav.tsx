@@ -35,7 +35,7 @@ export default function BottomNav() {
           );
         })}
         <button
-          onClick={() => signOut({ callbackUrl: "/login" })}
+          onClick={() => signOut({ callbackUrl: `${window.location.origin}/login` })}
           className="flex flex-col items-center gap-0.5 px-4 py-1.5 rounded-xl text-muted-foreground hover:text-foreground transition-colors"
         >
           <LogOut size={20} strokeWidth={1.8} />
