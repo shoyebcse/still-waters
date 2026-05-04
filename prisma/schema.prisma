@@ -1,0 +1,73 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id        String     @id @default(cuid())
+  email     String     @unique
+  password  String
+  name      String?
+  createdAt DateTime   @default(now())
+  conflicts Conflict[]
+}
+
+model Conflict {
+  id         String     @id @default(cuid())
+  userId     String
+  user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Mandatory
+  title      String
+  whoStarted WhoStarted
+  date       DateTime
+
+  // Optional
+  category   Category?
+  severity   Int?
+  outcome    Outcome?
+  notes      String?    @db.Text
+  duration   Int?
+  moodAfter  MoodAfter?
+
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+
+  @@index([userId, date])
+}
+
+enum WhoStarted {
+  ME
+  PARTNER
+  MUTUAL
+}
+
+enum Category {
+  MONEY
+  HOUSEHOLD
+  FAMILY
+  INTIMACY
+  COMMUNICATION
+  PARENTING
+  WORK
+  OTHER
+}
+
+enum Outcome {
+  RESOLVED
+  UNRESOLVED
+  ONGOING
+  WALKED_AWAY
+}
+
+enum MoodAfter {
+  CALM
+  ANGRY
+  SAD
+  HURT
+  NUMB
+  RELIEVED
+}
